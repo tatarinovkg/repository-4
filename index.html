@@ -258,7 +258,7 @@
         <div class="modal-footer">
             <div class="instructions">Введите текст для блокировки:</div>
             <input type="text" id="blockInput" class="search-input" placeholder="Текст для блокировки" onkeypress="handleBlockKeyPress(event)">
-            <button class="block-button" onclick="blockUser(currentUserId, document.getElementById('blockInput').value)">Заблокировать</button>
+            <button class="block-button" onclick="blockUser(currentUserId, document.getElementById('blockInput').value, currentTGname)">Заблокировать</button>
         </div>
     </div>
 </div>
@@ -275,6 +275,7 @@
     });
 
     let currentUserId = null; // Переменная для хранения текущего userId
+    let currentTGname = null; // Переменная для хранения текущего userId
 
     async function fetchUsers() {
         console.log('Fetching users...');
@@ -373,6 +374,7 @@
                 console.log('User details:', data);
                 if (data.found) {
                     const userInfo = data.data;
+                    currentTGname = userInfo.TGname;
                     const modalBody = document.getElementById('modalBody');
                     modalBody.innerHTML = `
                     <p><strong>UserId:</strong> ${userInfo.userID}</p>
@@ -403,7 +405,7 @@
         }, 300);
     }
 
-    function blockUser(userId, blockReason) {
+    function blockUser(userId, blockReason, TGname) {
         const blockInput = document.getElementById('blockInput');
         const reason = blockReason.trim();
         if (reason === '') {
@@ -414,7 +416,8 @@
         const data = {
             appId: 'blockUser',
             userId: userId,
-            blockReason: blockReason
+            blockReason: blockReason,
+            TGname: TGname
         };
         // Отправка данных в Web App
         tg.sendData(JSON.stringify(data));
