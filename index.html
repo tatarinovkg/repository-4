@@ -191,7 +191,7 @@
         }
 
         /* Стили для неактивной кнопки удаления (серо-красная) */
-        #block-button:disabled {
+        [id^="block-button_"]:disabled {
             background-color: #d6a1a1; /* Серо-красный цвет */
             color: #ffffff; /* Белый текст */
             opacity: 0.8; /* Немного прозрачная */
@@ -200,7 +200,7 @@
         }
 
         /* Стили для активной кнопки удаления (красная) */
-        #block-button {
+        [id^="block-button_"] {
             background: #dc3545;
             color: white;
             border: none;
@@ -212,12 +212,12 @@
         }
 
         /* Стили для ховера активной кнопки удаления */
-        #block-button:hover {
+        [id^="block-button_"]:hover {
             background-color: #bd2432; /* Темно-красный цвет при наведении */
         }
 
         /* Стили для неактивной кнопки проверки пароля (серо-синяя) */
-        #checkPasswordButton:disabled {
+        [id^="checkPasswordButton_"]:disabled {
             background-color: #a1b8d6; /* Серо-синий цвет */
             color: #ffffff; /* Белый текст */
             opacity: 0.8; /* Немного прозрачная */
@@ -226,7 +226,7 @@
         }
 
         /* Стили для активной кнопки проверки пароля (синяя) */
-        #checkPasswordButton {
+        [id^="checkPasswordButton_"] {
             background-color: #007bff; /* Синий цвет для активной кнопки */
             color: #ffffff; /* Белый текст */
             border: none;
@@ -234,7 +234,7 @@
         }
 
         /* Стили для ховера активной кнопки проверки пароля */
-        #checkPasswordButton:hover {
+        [id^="checkPasswordButton_"]:hover {
             background-color: #0056b3; /* Темно-синий цвет при наведении */
         }
 
@@ -288,15 +288,6 @@
             <button class="close-button" onclick="closeModal()">Закрыть</button>
         </div>
         <div id="modalBody" class="modal-body"></div>
-        <div class="modal-footer">
-            <div class="instructions">Введите текст для блокировки:</div>
-            <input type="text" id="blockInput" class="search-input" disabled placeholder="Текст для блокировки" onkeypress="handleBlockKeyPress(event)">
-            <button class="block-button" id="block-button" onclick="blockUser(currentUserId, document.getElementById('blockInput').value, currentTGname)" disabled>Заблокировать</button>
-            <label>
-                <input type="password" id="passwordInput" class="search-input" placeholder="Введите пароль" style="margin-bottom: 10px; margin-top: 10px">
-            </label>
-            <button class="search-submit" id="checkPasswordButton" disabled>Проверить пароль</button>
-        </div>
     </div>
 </div>
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
@@ -419,15 +410,22 @@
                     <p><strong>Admin:</strong> ${userInfo.admin}</p>
                     <p><strong>TGname:</strong> ${userInfo.TGname}</p>
                     <p><strong>Имя:</strong> ${userInfo.name}</p>
+                    <div class="instructions">Введите текст для блокировки:</div>
+                    <input type="text" id="blockInput_${userInfo.userID}" class="search-input" disabled placeholder="Текст для блокировки" onkeypress="handleBlockKeyPress(event)">
+                    <button class="block-button" id="block-button_${userInfo.userID}" onclick="blockUser(currentUserId, document.getElementById('blockInput').value, currentTGname)" disabled>Заблокировать</button>
+                    <label>
+                        <input type="password" id="passwordInput_${userInfo.userID}" class="search-input" placeholder="Введите пароль" style="margin-bottom: 10px; margin-top: 10px">
+                    </label>
+                    <button class="search-submit" id="checkPasswordButton_${userInfo.userID}" disabled>Проверить пароль</button>
                 `;
                     const modal = document.getElementById('detailsModal');
                     modal.style.display = 'flex';
                     modal.classList.add('show');
                     // Инициализация элементов после их создания
-                    const passwordInput = document.getElementById('passwordInput');
-                    const checkPasswordButton = document.getElementById('checkPasswordButton');
-                    const blockButton = document.getElementById('block-button');
-                    const blockInput = document.getElementById('blockInput');
+                    const passwordInput = document.getElementById(`passwordInput_${userInfo.userID}`);
+                    const checkPasswordButton = document.getElementById(`checkPasswordButton_${userInfo.userID}`);
+                    const blockButton = document.getElementById(`block-button_${userInfo.userID}`);
+                    const blockInput = document.getElementById(`blockInput_${userInfo.userID}`);
 
                     // Активируем кнопку проверки, когда введён текст
                     passwordInput.addEventListener('input', function() {
