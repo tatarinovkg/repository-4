@@ -190,20 +190,52 @@
             border-color: #ff0000;
         }
 
-        .block-button {
-            background: #007bff;
+        /* Стили для неактивной кнопки удаления (серо-красная) */
+        #block-button:disabled {
+            background-color: #d6a1a1; /* Серо-красный цвет */
+            color: #ffffff; /* Белый текст */
+            opacity: 0.8; /* Немного прозрачная */
+            pointer-events: none; /* Отключаем все события для неактивных кнопок, включая hover */
+            transition: background-color 0.3s ease, opacity 0.3s ease; /* Плавная анимация */
+        }
+
+        /* Стили для активной кнопки удаления (красная) */
+        #block-button {
+            background: #dc3545;
             color: white;
             border: none;
             padding: 10px;
             border-radius: 8px;
             cursor: pointer;
             width: 100%;
-            margin-top: 1px;
-            transition: background-color 0.3s;
+            transition: background-color 0.3s ease, opacity 0.3s ease; /* Плавная анимация */
         }
 
-        .block-button:hover {
-            background-color: #0056b3;
+        /* Стили для ховера активной кнопки удаления */
+        #block-button:hover {
+            background-color: #bd2432; /* Темно-красный цвет при наведении */
+        }
+
+        /* Стили для неактивной кнопки проверки пароля (серо-синяя) */
+        #checkPasswordButton:disabled {
+            background-color: #a1b8d6; /* Серо-синий цвет */
+            color: #ffffff; /* Белый текст */
+            opacity: 0.8; /* Немного прозрачная */
+            pointer-events: none; /* Отключаем все события для неактивных кнопок, включая hover */
+            transition: background-color 0.3s ease, opacity 0.3s ease; /* Плавная анимация */
+        }
+
+        /* Стили для активной кнопки проверки пароля (синяя) */
+        #checkPasswordButton {
+            background-color: #007bff; /* Синий цвет для активной кнопки */
+            color: #ffffff; /* Белый текст */
+            border: none;
+            transition: background-color 0.3s ease, opacity 0.3s ease; /* Плавная анимация */
+        }
+
+        /* Стили для ховера активной кнопки проверки пароля */
+        #checkPasswordButton:hover {
+            background-color: #0056b3; /* Темно-синий цвет при наведении */
         }
 
         @keyframes fadeIn {
@@ -258,8 +290,12 @@
         <div id="modalBody" class="modal-body"></div>
         <div class="modal-footer">
             <div class="instructions">Введите текст для блокировки:</div>
-            <input type="text" id="blockInput" class="search-input" placeholder="Текст для блокировки" onkeypress="handleBlockKeyPress(event)">
-            <button class="block-button" onclick="blockUser(currentUserId, document.getElementById('blockInput').value, currentTGname)">Заблокировать</button>
+            <input type="text" id="blockInput" class="search-input" disabled placeholder="Текст для блокировки" onkeypress="handleBlockKeyPress(event)">
+            <button class="block-button" id="block-button" onclick="blockUser(currentUserId, document.getElementById('blockInput').value, currentTGname)" disabled>Заблокировать</button>
+            <label>
+                <input type="password" id="passwordInput" class="search-input" placeholder="Введите пароль" style="margin-bottom: 10px; margin-top: 10px">
+            </label>
+            <button class="search-submit" id="checkPasswordButton" disabled>Проверить пароль</button>
         </div>
     </div>
 </div>
@@ -348,7 +384,7 @@
                     <p><strong>ClassId:</strong> ${data.data.classID}</p>
                     <p><strong>Администратор:</strong> ${data.data.admin}</p>
                     <button class="details-button" onclick="showDetails('${data.data.userID}')">Подробнее</button>
-                `;
+                    `;
                     searchResult.appendChild(userDiv);
                 } else {
                     searchResult.innerHTML = '<p>Пользователь не найден</p>';
@@ -387,6 +423,49 @@
                     const modal = document.getElementById('detailsModal');
                     modal.style.display = 'flex';
                     modal.classList.add('show');
+                    // Инициализация элементов после их создания
+                    const passwordInput = document.getElementById('passwordInput');
+                    const checkPasswordButton = document.getElementById('checkPasswordButton');
+                    const blockButton = document.getElementById('block-button');
+                    const blockInput = document.getElementById('blockInput');
+
+                    // Активируем кнопку проверки, когда введён текст
+                    passwordInput.addEventListener('input', function() {
+                        checkPasswordButton.disabled = passwordInput.value.trim() === '';
+                    });
+
+                    // Проверка пароля
+                    checkPasswordButton.addEventListener('click', async function() {
+                        const password = passwordInput.value.trim();
+                        const response = await fetch('https://louse-precious-sincerely.ngrok-free.app/api/check_password', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify({ password })
+                        });
+
+                        const result = await response.json();
+
+                        if (result.success) {
+                            passwordInput.style.borderColor = 'green';
+                            blockButton.disabled = false;
+                            blockInput.disabled = false;
+                        } else {
+                            passwordInput.style.borderColor = 'red';
+                            blockButton.disabled = true;
+                            blockInput.disabled = true;
+                        }
+                    });
+
+                    // Блокируем кнопку удаления, если поле пароля снова пустое
+                    passwordInput.addEventListener('input', function() {
+                        if (passwordInput.value.trim() === '') {
+                            blockButton.disabled = true;
+                            blockInput.disabled = true;
+                            passwordInput.style.borderColor = ''; // Сбросить обводку
+                        }
+                    });
                 } else {
                     alert('Пользователь не найден.');
                 }
