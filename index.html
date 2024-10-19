@@ -116,13 +116,12 @@
         .modal {
             display: none;
             position: fixed;
+            text-align: center;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.5);
-            justify-content: center;
-            align-items: center;
+            background: rgba(255, 255, 255, 1); /* Убираем затемнение */
             opacity: 0;
             visibility: hidden;
             transition: opacity 0.3s, visibility 0.3s;
@@ -134,33 +133,30 @@
         }
 
         .modal-content {
-            background: white;
-            padding: 15px;
-            border-radius: 8px;
-            max-width: 90%;
-            width: 450px;
-            transition: transform 0.3s, opacity 0.3s;
-            animation: fadeIn 0.3s;
+            max-width: 90%; /* Максимальная ширина 90% */
+            width: 100%; /* Занимаем всю ширину внутри max-width */
+            height: auto; /* Авто-высота для содержимого */
+            max-height: 90%; /* Ограничиваем высоту до 90% высоты экрана */
+            overflow-y: auto; /* Прокрутка для содержимого, если оно превышает высоту */
+            padding: 20px; /* Отступы вокруг содержимого */
+            margin: 0 auto
         }
 
         .modal-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
             margin-bottom: 15px;
-            height: 50px;
+            text-align: left; /* Выравнивание заголовка по левому краю */
         }
 
         .close-button {
             background: #dc3545;
             color: white;
             border: none;
-            cursor: pointer;
-            font-size: 16px;
+            padding: 10px;
             border-radius: 8px;
-            padding: 8px 12px;
-            margin-left: 15px;
-            transition: background-color 0.3s;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 10px;
+            transition: background-color 0.3s ease, opacity 0.3s ease; /* Плавная анимация */
         }
 
         .close-button:hover {
@@ -284,7 +280,6 @@
 <div id="detailsModal" class="modal">
     <div class="modal-content">
         <div class="modal-header">
-            <h2>Информация о пользователе</h2>
             <button class="close-button" onclick="closeModal()">Закрыть</button>
         </div>
         <div id="modalBody" class="modal-body"></div>
@@ -405,6 +400,7 @@
                     currentTGname = userInfo.TGname;
                     const modalBody = document.getElementById('modalBody');
                     modalBody.innerHTML = `
+                    <h2>Информация о пользователе</h2>
                     <p><strong>UserId:</strong> ${userInfo.userID}</p>
                     <p><strong>ClassId:</strong> ${userInfo.classID}</p>
                     <p><strong>Admin:</strong> ${userInfo.admin}</p>
