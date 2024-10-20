@@ -480,7 +480,7 @@
     }
 
     function blockUser(userId, blockReason, TGname) {
-        const blockInput = document.getElementById('blockInput');
+        const blockInput = document.getElementById(`blockInput_${userId}`);
         const reason = blockReason.trim();
         if (reason === '') {
             blockInput.classList.add('error');
@@ -490,7 +490,7 @@
         const data = {
             appId: 'blockUser',
             userId: userId,
-            blockReason: blockReason,
+            blockReason: reason,
             TGname: TGname
         };
         // Отправка данных в Web App
