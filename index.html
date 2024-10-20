@@ -408,7 +408,7 @@
                     <p><strong>Имя:</strong> ${userInfo.name}</p>
                     <div class="instructions">Введите текст для блокировки:</div>
                     <input type="text" id="blockInput_${userInfo.userID}" class="search-input" disabled placeholder="Текст для блокировки" onkeypress="handleBlockKeyPress(event)">
-                    <button class="block-button" id="block-button_${userInfo.userID}" onclick="blockUser(currentUserId, document.getElementById('blockInput').value, currentTGname)" disabled>Заблокировать</button>
+                    <button class="block-button" id="block-button_${userInfo.userID}" onclick="blockUser(currentUserId, document.getElementById('blockInput_${userInfo.userID}').value, currentTGname)" disabled>Заблокировать</button>
                     <label>
                         <input type="password" id="passwordInput_${userInfo.userID}" class="search-input" placeholder="Введите пароль" style="margin-bottom: 10px; margin-top: 10px">
                     </label>
