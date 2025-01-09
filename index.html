@@ -303,7 +303,7 @@
     async function fetchUsers() {
         console.log('Fetching users...');
         try {
-            const response = await fetch('https://louse-precious-sincerely.ngrok-free.app/api/users', {
+            const response = await fetch('https://tatarinovkg.cloudpub.ru/api/users', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -348,7 +348,7 @@
 
         searchInput.classList.remove('error');
 
-        fetch('https://louse-precious-sincerely.ngrok-free.app/api/search/user', {
+        fetch('https://tatarinovkg.cloudpub.ru/api/search/user', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -385,7 +385,7 @@
         console.log('Showing details for userId:', userId);
         currentUserId = userId; // Сохраняем userId для использования при блокировке
 
-        fetch('https://louse-precious-sincerely.ngrok-free.app/api/search/user', {
+        fetch('https://tatarinovkg.cloudpub.ru/api/search/user', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -431,7 +431,7 @@
                     // Проверка пароля
                     checkPasswordButton.addEventListener('click', async function() {
                         const password = passwordInput.value.trim();
-                        const response = await fetch('https://louse-precious-sincerely.ngrok-free.app/api/check_password', {
+                        const response = await fetch('https://tatarinovkg.cloudpub.ru/api/check_password', {
                             method: 'POST',
                             headers: {
                                 'Content-Type': 'application/json'
